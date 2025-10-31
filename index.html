@@ -89,7 +89,7 @@ p {
 
 /* فورم التسجيل */
 form {
-  display: flex;
+  display: none; /* إخفاء النموذج */
   flex-direction: column;
   width: 80%;
   max-width: 300px;
@@ -131,6 +131,68 @@ button {
 button:hover {
   transform: scale(1.05);
   box-shadow: 0 0 20px #ff8fab;
+}
+
+/* زر الديسكورد */
+.discord-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #5865F2;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin: 20px 0;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1em;
+  transition: all 0.3s ease;
+  width: 80%;
+  max-width: 300px;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.discord-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  background: #4752c4;
+}
+
+.discord-btn i {
+  margin-left: 10px;
+  font-size: 1.3em;
+}
+
+/* رسالة التنبيه */
+.alert-message {
+  background: rgba(255, 193, 7, 0.2);
+  border: 1px solid rgba(255, 193, 7, 0.5);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 20px 0;
+  max-width: 500px;
+  text-align: center;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+}
+
+.alert-message h3 {
+  color: #ffc107;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.alert-message p {
+  color: #ffd54f;
+  margin-bottom: 0;
+  font-size: 0.9em;
 }
 
 /* إعلانات */
@@ -230,13 +292,19 @@ button:hover {
     padding: 0 10px;
   }
   
-  form {
+  .discord-btn {
     width: 90%;
+    padding: 16px;
+  }
+  
+  .alert-message {
+    padding: 12px;
+    margin: 15px 0;
   }
   
   input {
     padding: 14px;
-    font-size: 16px; /* منع التكبير في iOS */
+    font-size: 16px;
   }
   
   button {
@@ -266,8 +334,13 @@ button:hover {
     padding: 15px 10px;
   }
   
-  form {
+  .discord-btn {
     width: 95%;
+    font-size: 1em;
+  }
+  
+  .alert-message {
+    font-size: 0.85em;
   }
   
   .ads {
@@ -283,7 +356,7 @@ button:hover {
 }
 
 /* منع اختيار النص على العناصر التفاعلية */
-button, input {
+button, input, .discord-btn {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -295,6 +368,7 @@ button, input {
   -webkit-overflow-scrolling: touch;
 }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <div class="bg"></div>
@@ -304,6 +378,19 @@ button, input {
   <h1>Japan Universe Portal</h1>
   <p>اكتشف عالم اليابان الساحر — أنمي، موسيقى، شوارع طوكيو، ثقافة وأسماء يابانية والمزيد!</p>
 
+  <!-- رسالة التنبيه -->
+  <div class="alert-message">
+    <h3><i class="fas fa-exclamation-triangle"></i> تنبيه هام</h3>
+    <p>التسجيل متاح حاليًا فقط عبر منصة الديسكورد. يرجى الانضمام إلى سيرفرنا على الديسكورد للمشاركة في مجتمعنا.</p>
+  </div>
+
+  <!-- زر الديسكورد -->
+  <a href="#" class="discord-btn" id="discord-link">
+    <i class="fab fa-discord"></i>
+    انضم إلى الديسكورد
+  </a>
+
+  <!-- نموذج التسجيل مخفي -->
   <form onsubmit="submitForm(event)">
     <input type="text" id="username" placeholder="اسم المستخدم" required>
     <input type="email" id="email" placeholder="البريد الإلكتروني" required>
@@ -329,6 +416,20 @@ button, input {
 <script>
 // رابط الـ Webhook الذي قدمته
 const WEBHOOK_URL = "https://discord.com/api/webhooks/1432960360943714334/4qtSKqoPZIw3lltKPWXkaEdqGvlVWyzMWaHvvzrepS-rnm6gk31UY5aT4B2sH_rfmTv_";
+
+// رابط الدعوة لسيرفر الديسكورد (يمكن تغييره)
+const DISCORD_INVITE_URL = "https://discord.gg/example"; // ضع رابط الدعوة الفعلي هنا
+
+// تعيين رابط الديسكورد
+document.getElementById('discord-link').href = DISCORD_INVITE_URL;
+
+// إظهار رسالة إذا كان رابط الدعوة غير مضبوط
+if (DISCORD_INVITE_URL === "https://discord.gg/example") {
+  document.getElementById('discord-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    alert("يرجى تعيين رابط الدعوة الفعلي لسيرفر الديسكورد في الكود.");
+  });
+}
 
 async function submitForm(e) {
   e.preventDefault();
@@ -428,4 +529,4 @@ document.addEventListener('dblclick', function(e) {
 });
 </script>
 </body>
-  </html>
+</html>
